@@ -1,0 +1,21 @@
+@import '../../../styles/variables.scss';
+.auth-group-buttons {
+  display: flex;
+}
+
+.header-link {
+  text-decoration: none;
+  vertical-align: middle;
+  height: 51px;
+  display: flex;
+  align-items: center;
+  padding-inline: 18px;
+  &:visited {
+    color: $heading-text-color;
+  }
+
+  &--success {
+    border: 1px solid $success-color;
+    border-radius: 5px;
+  }
+}
