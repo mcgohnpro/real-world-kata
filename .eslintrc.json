@@ -63,7 +63,7 @@
       { "property": "freeze", "object": "Object" },
       { "property": "myFavoriteWrapper" },
       // for rules that check exact prop wrappers
-      { "property": "forbidExtraProps", "exact": true }
+      { "property": "forbidExtraProps", "exact": false }
     ],
     "componentWrapperFunctions": [
       // The name of any function used to wrap components, e.g. Mobx `observer` function. If this isn't set, components wrapped by these functions will be skipped.

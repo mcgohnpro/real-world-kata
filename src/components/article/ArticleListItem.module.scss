@@ -82,32 +82,3 @@
   line-height: 183%;
   color: $text-color;
 }
-
-.article-author-wrapper {
-  display: flex;
-  column-gap: 12px;
-  justify-content: start;
-}
-.author-name-wrapper {
-  display: flex;
-  flex-direction: column;
-}
-.author-name {
-  display: block;
-  font-size: 18px;
-  line-height: 156%;
-  color: $heading-text-color;
-}
-
-.article-date {
-  display: block;
-  font-size: 12px;
-  line-height: 183%;
-  color: $text-color-secondary;
-}
-
-.avatar {
-  width: 48px;
-  height: 48px;
-  background: url('../../assets/Rectangle 1.png') no-repeat center;
-}

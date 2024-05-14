@@ -1,0 +1,32 @@
+@import '/src/styles/variables.scss';
+
+.article-author-wrapper {
+  display: flex;
+  column-gap: 12px;
+  justify-content: start;
+  height: fit-content;
+}
+.author-name-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.author-name {
+  display: block;
+  font-size: 18px;
+  line-height: 156%;
+  color: $heading-text-color;
+}
+
+.article-date {
+  display: block;
+  font-size: 12px;
+  line-height: 183%;
+  color: $text-color-secondary;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  background: no-repeat center;
+}
