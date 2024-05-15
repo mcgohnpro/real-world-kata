@@ -18,15 +18,32 @@ export default function Pagination({ currentPage, articlesCount }) {
     return arr
   }, [articlesCount])
 
+  if (currentPage > startPage + 5) {
+    setStartPage(currentPage - 1)
+  }
+
+  if (currentPage <= startPage) {
+    setStartPage(currentPage - 1)
+  }
+
   return (
     <div className={styles['pagination-wrapper']}>
-      <button disabled type="button" aria-label="backward page" className={styles['page-arrow-button']} />
+      <button
+        onClick={() => {
+          dispatch(updateCurrentPage(currentPage - 1))
+          dispatch(fetchArticles(`${(currentPage - 2) * 5}`))
+        }}
+        disabled={currentPage === 1}
+        type="button"
+        aria-label="backward page"
+        className={styles['page-arrow-button']}
+      />
       {pages.slice(startPage, startPage + 5).map((page, index) => {
         return (
           <button
             onClick={() => {
-              dispatch(updateCurrentPage(startPage + index + 1))
-              dispatch(fetchArticles(`${(startPage + index) * 5}`))
+              dispatch(updateCurrentPage(page))
+              dispatch(fetchArticles(`${(page - 1) * 5}`))
             }}
             key={page}
             type="button"
@@ -42,9 +59,8 @@ export default function Pagination({ currentPage, articlesCount }) {
         aria-label="forward page"
         className={styles['page-arrow-button']}
         onClick={() => {
-          setStartPage((prevState) => {
-            return prevState + 1
-          })
+          dispatch(updateCurrentPage(currentPage + 1))
+          dispatch(fetchArticles(`${currentPage * 5}`))
         }}
       />
     </div>

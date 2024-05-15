@@ -15,7 +15,11 @@ export default function ArticlesListPage() {
     <>
       <ul className={styles['articles-list']}>
         {articles.map((article) => {
-          return <ArticleListItem key={article.slug} article={article} />
+          return (
+            <li key={article.slug}>
+              <ArticleListItem article={article} />
+            </li>
+          )
         })}
       </ul>
       <Pagination currentPage={currentPage} articlesCount={articlesCount} />
