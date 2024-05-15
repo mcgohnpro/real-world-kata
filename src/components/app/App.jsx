@@ -1,7 +1,5 @@
-/* eslint-disable consistent-return */
-/* eslint-disable no-unused-vars */
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
 import Header from '../header'
@@ -11,37 +9,10 @@ import ArticleListItem from '../article'
 
 import styles from './App.module.scss'
 
-function fetchArticleBySlug(slug) {
-  return fetch(`https://blog.kata.academy/api/articles/${slug}`)
-    .then((response) => {
-      if (response.ok) {
-        return response.json()
-      }
-      throw new Error('Error fetch article by slug')
-    })
-    .then((json) => {
-      return json.article
-    })
-}
-
-export function withSlugArticle(WrappedComponent) {
-  return function NewComp(props) {
-    const { slug } = props
-    const [article, setArticle] = useState()
-    useEffect(() => {
-      fetchArticleBySlug(slug).then((articleBySlug) => {
-        setArticle(articleBySlug)
-      })
-    }, [])
-    if (article) return <WrappedComponent article={article} withBody />
-  }
-}
-
-const WC = withSlugArticle(ArticleListItem)
+let busy = false
 
 function App() {
   const dispatch = useDispatch()
-  let busy = false
   useEffect(() => {
     if (!busy) {
       dispatch(fetchArticles())
@@ -60,9 +31,12 @@ function App() {
           <Route path="/articles/" exact component={ArticlesListPage} />
           <Route
             path="/articles/:slug"
-            render={({ match }) => {
+            render={({ match, location, history }) => {
+              console.log('📢[App.jsx:35]: match: ', match)
+              console.log('📢[App.jsx:36]: location: ', location)
+              console.log('📢[App.jsx:37]: history: ', history)
               const { slug } = match.params
-              return <WC slug={slug} />
+              return <ArticleListItem articleId={slug} withBody />
             }}
           />
           <Redirect to="/" />

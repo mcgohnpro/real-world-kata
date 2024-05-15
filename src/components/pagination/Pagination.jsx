@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 import PropTypes from 'prop-types'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { fetchArticles, updateCurrentPage } from '../../store/slices/articleSlice'
@@ -38,7 +37,7 @@ export default function Pagination({ currentPage, articlesCount }) {
         aria-label="backward page"
         className={styles['page-arrow-button']}
       />
-      {pages.slice(startPage, startPage + 5).map((page, index) => {
+      {pages.slice(startPage, startPage + 5).map((page) => {
         return (
           <button
             onClick={() => {

@@ -1,15 +1,25 @@
-/* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
 
 import ProfileAvatar from '../profile-avatar'
 import getId from '../../utils/idGenerators'
+import fetchArticleBySlug from '../../api'
 
 import styles from './ArticleListItem.module.scss'
 
-export default function ArticleListItem({ article, withBody }) {
+export default function ArticleListItem({ articleId, withBody }) {
+  const [article, setArticle] = useState()
+
+  useEffect(() => {
+    fetchArticleBySlug(articleId).then((fetchedArticle) => {
+      setArticle(fetchedArticle)
+    })
+  }, [])
+
+  if (!article) return null
   const { title, description, favoritesCount, author, createdAt, tagList, slug, body } = article
   const articleBody = withBody ? <div className={styles['article-body']}>{body}</div> : null
+
   return (
     <article className={styles.article}>
       <div className={styles.header}>
@@ -24,7 +34,7 @@ export default function ArticleListItem({ article, withBody }) {
             </div>
           </div>
           <ul className={styles['tags-wrapper']}>
-            {tagList.map((tag, index) => {
+            {tagList.map((tag) => {
               return (
                 <li key={getId()} className={styles.tag}>
                   {tag}

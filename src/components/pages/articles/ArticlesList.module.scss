@@ -1,10 +1,8 @@
 .articles-list {
-  width: 938px;
+  max-width: 938px;
+  width: 94vw;
   margin-inline: auto;
   list-style: none;
   padding-inline-start: 0;
   margin-block: 0;
-  height: 82vh;
-  overflow-x: hidden;
-  overflow-y: auto;
 }

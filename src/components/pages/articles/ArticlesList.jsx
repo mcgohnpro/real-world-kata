@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable no-unused-vars */
 import { useSelector } from 'react-redux'
 
 import ArticleListItem from '../../article'
@@ -14,10 +12,10 @@ export default function ArticlesListPage() {
   return (
     <>
       <ul className={styles['articles-list']}>
-        {articles.map((article) => {
+        {articles.map((slug) => {
           return (
-            <li key={article.slug}>
-              <ArticleListItem article={article} />
+            <li key={slug}>
+              <ArticleListItem articleId={slug} />
             </li>
           )
         })}
