@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
@@ -27,14 +28,25 @@ function App() {
       <Header />
       <main className={styles.main}>
         <Switch>
-          <Route path="/" exact component={ArticlesListPage} />
-          <Route path="/articles/" exact component={ArticlesListPage} />
           <Route
+            path="/"
+            exact
+            render={() => {
+              return <ArticlesListPage />
+            }}
+          />
+          <Route
+            exact
+            path="/articles/"
+            render={({ match, location, history }) => {
+              const page = new URLSearchParams(location.search).get('page')
+              return <ArticlesListPage />
+            }}
+          />
+          <Route
+            exact
             path="/articles/:slug"
             render={({ match, location, history }) => {
-              console.log('📢[App.jsx:35]: match: ', match)
-              console.log('📢[App.jsx:36]: location: ', location)
-              console.log('📢[App.jsx:37]: history: ', history)
               const { slug } = match.params
               return <ArticleListItem articleId={slug} withBody />
             }}

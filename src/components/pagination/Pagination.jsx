@@ -1,18 +1,20 @@
-import PropTypes from 'prop-types'
 import { useMemo, useState } from 'react'
-import { useDispatch } from 'react-redux'
-
-import { fetchArticles, updateCurrentPage } from '../../store/slices/articleSlice'
+import { useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 
 import styles from './Pagination.module.scss'
 
-export default function Pagination({ currentPage, articlesCount }) {
+export default function Pagination() {
+  const history = useHistory()
+  const { currentPage, articlesCount } = useSelector((store) => {
+    return store.articles
+  })
   const [startPage, setStartPage] = useState(0)
-  const dispatch = useDispatch()
+
   const pages = useMemo(() => {
     const arr = []
-    for (let i = 0; i <= Math.ceil(articlesCount / 5); i += 1) {
-      arr[i] = i + 1
+    for (let i = 0; i < Math.ceil(articlesCount / 5); i += 1) {
+      arr[i] = String(i + 1)
     }
     return arr
   }, [articlesCount])
@@ -29,8 +31,7 @@ export default function Pagination({ currentPage, articlesCount }) {
     <div className={styles['pagination-wrapper']}>
       <button
         onClick={() => {
-          dispatch(updateCurrentPage(currentPage - 1))
-          dispatch(fetchArticles(`${(currentPage - 2) * 5}`))
+          history.push(`/articles/?page=${+currentPage - 1}`)
         }}
         disabled={currentPage === 1}
         type="button"
@@ -41,8 +42,7 @@ export default function Pagination({ currentPage, articlesCount }) {
         return (
           <button
             onClick={() => {
-              dispatch(updateCurrentPage(page))
-              dispatch(fetchArticles(`${(page - 1) * 5}`))
+              history.push(`/articles/?page=${page}`)
             }}
             key={page}
             type="button"
@@ -58,20 +58,9 @@ export default function Pagination({ currentPage, articlesCount }) {
         aria-label="forward page"
         className={styles['page-arrow-button']}
         onClick={() => {
-          dispatch(updateCurrentPage(currentPage + 1))
-          dispatch(fetchArticles(`${currentPage * 5}`))
+          history.push(`/articles/?page=${+currentPage + 1}`)
         }}
       />
     </div>
   )
-}
-
-Pagination.defaultProps = {
-  currentPage: 1,
-  articlesCount: 1,
-}
-
-Pagination.propTypes = {
-  currentPage: PropTypes.number,
-  articlesCount: PropTypes.number,
 }

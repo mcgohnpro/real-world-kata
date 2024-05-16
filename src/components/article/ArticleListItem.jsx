@@ -9,7 +9,6 @@ import styles from './ArticleListItem.module.scss'
 
 export default function ArticleListItem({ articleId, withBody }) {
   const [article, setArticle] = useState()
-
   useEffect(() => {
     fetchArticleBySlug(articleId).then((fetchedArticle) => {
       setArticle(fetchedArticle)

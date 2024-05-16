@@ -1,6 +1,7 @@
 .articles-list {
   max-width: 938px;
-  width: 94vw;
+  width: 100%;
+  box-sizing: border-box;
   margin-inline: auto;
   list-style: none;
   padding-inline-start: 0;
