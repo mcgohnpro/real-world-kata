@@ -1,9 +1,11 @@
+/* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { Skeleton } from 'antd'
 
 import ProfileAvatar from '../profile-avatar'
 import getId from '../../utils/idGenerators'
-import fetchArticleBySlug from '../../api'
+import { fetchArticleBySlug } from '../../api'
 
 import styles from './ArticleListItem.module.scss'
 
@@ -15,7 +17,12 @@ export default function ArticleListItem({ articleId, withBody }) {
     })
   }, [])
 
-  if (!article) return null
+  if (!article)
+    return (
+      <article className={styles.article}>
+        <Skeleton active />
+      </article>
+    )
   const { title, description, favoritesCount, author, createdAt, tagList, slug, body } = article
   const articleBody = withBody ? <div className={styles['article-body']}>{body}</div> : null
 

@@ -1,40 +1,38 @@
+/* eslint-disable no-unused-vars */
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
+import { Spin } from 'antd'
 
-import { updateCurrentPage, fetchArticles } from '../../../store/slices/articleSlice'
+import { loadArticles } from '../../../store/slices/articleSlice'
 import ArticleListItem from '../../article'
 import Pagination from '../../pagination'
+import { useQuery } from '../../../hooks'
 
 // TODO переименовать сам файл
 
 import styles from './ArticlesList.module.scss'
 
-function useQuery() {
-  const { search } = useLocation()
-
-  return useMemo(() => new URLSearchParams(search), [search])
-}
-
 export default function ArticlesListPage() {
+  const { loading } = useSelector((store) => store.commonState)
   const dispatch = useDispatch()
   const query = useQuery()
 
   useEffect(() => {
     const page = query.get('page')
-
     if (page) {
-      dispatch(updateCurrentPage(page))
-      dispatch(fetchArticles((page - 1) * 5))
+      dispatch(loadArticles((page - 1) * 5))
     } else {
-      dispatch(updateCurrentPage('1'))
-      dispatch(fetchArticles())
+      dispatch(loadArticles())
     }
   }, [query])
 
   const { articles, articlesCount } = useSelector((store) => {
     return store.articles
   })
+
+  // if (loading) {
+  //   return <Spin size="large" />
+  // }
   return (
     <>
       <ul className={styles['articles-list']}>
