@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom'
 import { useQuery } from '../../hooks'
 
 import styles from './Pagination.module.scss'
-// TODO косяк со startPage, почему то обнуляется
+// TODO косяк со startPage, обнуляется, так как размонтируется main
 export default function Pagination() {
   const history = useHistory()
   const { articlesCount } = useSelector((store) => {

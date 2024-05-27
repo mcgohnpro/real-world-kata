@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Spin } from 'antd'
 
 import Header from '../header'
-import ArticlesListPage from '../pages/articles'
+import ArticlesList from '../pages/articles'
 import { loadArticles } from '../../store/slices/articleSlice'
 import ArticleListItem from '../article'
+import SignInForm from '../pages/sign-in'
 
 import styles from './App.module.scss'
 
@@ -34,14 +35,14 @@ function App() {
             path="/"
             exact
             render={() => {
-              return <ArticlesListPage />
+              return <ArticlesList />
             }}
           />
           <Route
             exact
             path="/articles/"
             render={() => {
-              return <ArticlesListPage />
+              return <ArticlesList />
             }}
           />
           <Route
@@ -52,6 +53,7 @@ function App() {
               return <ArticleListItem articleId={slug} withBody />
             }}
           />
+          <Route exact path="/sign-in" component={SignInForm} />
           <Redirect to="/" />
         </Switch>
       </main>

@@ -21,7 +21,7 @@ const commonStateSlice = createSlice({
     })
     builder.addCase(loadArticles.rejected, (state, action) => {
       state.loading = false
-      state.errors = action.payload
+      state.errors.push(action.error)
     })
   },
 })

@@ -8,11 +8,9 @@ import ArticleListItem from '../../article'
 import Pagination from '../../pagination'
 import { useQuery } from '../../../hooks'
 
-// TODO переименовать сам файл
-
 import styles from './ArticlesList.module.scss'
 
-export default function ArticlesListPage() {
+export default function ArticlesList() {
   const { loading } = useSelector((store) => store.commonState)
   const dispatch = useDispatch()
   const query = useQuery()
@@ -30,20 +28,21 @@ export default function ArticlesListPage() {
     return store.articles
   })
 
-  // if (loading) {
-  //   return <Spin size="large" />
-  // }
+  const articlesList = (
+    <ul className={styles['articles-list']}>
+      {articles.map((slug) => {
+        return (
+          <li key={slug}>
+            <ArticleListItem articleId={slug} />
+          </li>
+        )
+      })}
+    </ul>
+  )
+
   return (
     <>
-      <ul className={styles['articles-list']}>
-        {articles.map((slug) => {
-          return (
-            <li key={slug}>
-              <ArticleListItem articleId={slug} />
-            </li>
-          )
-        })}
-      </ul>
+      {loading ? <Spin size="large" /> : articlesList}
       <Pagination articlesCount={articlesCount} />
     </>
   )

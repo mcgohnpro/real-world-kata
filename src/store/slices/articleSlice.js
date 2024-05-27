@@ -1,7 +1,5 @@
 /* eslint-disable no-param-reassign */
 
-// TODO сделать слайс с общими состояниями приложения
-
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchArticles } from '../../api/index'

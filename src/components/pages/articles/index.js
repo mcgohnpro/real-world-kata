@@ -1,3 +1,3 @@
-import ArticlesListPage from './ArticlesList'
+import ArticlesList from './ArticlesList'
 
-export default ArticlesListPage
+export default ArticlesList

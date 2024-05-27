@@ -1,0 +1,80 @@
+@import '/src/styles/variables.scss';
+@import '/src/styles/mixins.scss';
+
+.sign-in-form {
+  @include secondary-font-face;
+  background-color: $background-color-base;
+  width: fit-content;
+  padding: 48px 32px;
+  margin-inline: auto;
+  border-radius: 6px;
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.02),
+    0 1px 7px 0 rgba(0, 0, 0, 0.03),
+    0 3px 13px 0 rgba(0, 0, 0, 0.04),
+    0 5px 24px 0 rgba(0, 0, 0, 0.04),
+    0 9px 44px 0 rgba(0, 0, 0, 0.05),
+    0 22px 106px 0 rgba(0, 0, 0, 0.07);
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 140%;
+  text-align: center;
+  margin-block: 0;
+  margin-bottom: 21px;
+}
+
+.form-items-group {
+  margin-block: 0;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.form-item-label {
+  font-size: 14px;
+  line-height: 157%;
+  color: #262626;
+}
+
+.form-item-imput {
+  width: 320px;
+  height: 40px;
+  padding-inline: 12px;
+  border-radius: 5px;
+  border-color: #bfbfbf;
+  border-style: solid;
+  border-width: 1px;
+  &::placeholder {
+    font-size: 16px;
+    color: #bfbfbf;
+  }
+}
+
+.form-submit {
+  border: none;
+  background-color: $primary-color;
+  height: 40px;
+  color: $background-color-base;
+  font-size: 16px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.form-login-message {
+  font-size: 12px;
+  line-height: 167%;
+  color: #8c8c8c;
+  align-self: center;
+}
+
+.form-login-message-link {
+  text-decoration: none;
+  color: $primary-color;
+  &:visited {
+    color: $primary-color;
+  }
+}
