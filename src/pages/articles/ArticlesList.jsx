@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { Spin } from 'antd'
 
-import { loadArticles } from '../../../store/slices/articleSlice'
-import ArticleListItem from '../../article'
-import Pagination from '../../pagination'
-import { useQuery } from '../../../hooks'
+import { loadArticles } from '../../store/slices/articleSlice'
+import ArticleListItem from '../../components/article'
+import Pagination from '../../components/pagination'
+import { useQuery } from '../../hooks'
 
 import styles from './ArticlesList.module.scss'
 

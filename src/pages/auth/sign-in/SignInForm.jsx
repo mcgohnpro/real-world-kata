@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom'
 
-import styles from './SignInForm.module.scss'
+import styles from '../AuthFormCommonStyles.module.scss'
 
 export default function SignInForm() {
   return (

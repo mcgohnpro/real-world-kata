@@ -6,6 +6,8 @@ import { useQuery } from '../../hooks'
 
 import styles from './Pagination.module.scss'
 // TODO косяк со startPage, обнуляется, так как размонтируется main
+// TODO сделать так, чтобы нельязя было перейти на несуществующую страницу
+// TODO не должно уменьшаться количество страниц при подходе к последним
 export default function Pagination() {
   const history = useHistory()
   const { articlesCount } = useSelector((store) => {
@@ -28,7 +30,7 @@ export default function Pagination() {
     setStartPage(currentPage - 1)
   }
 
-  if (currentPage < startPage) {
+  if (currentPage <= startPage) {
     setStartPage(currentPage - 1)
   }
 
