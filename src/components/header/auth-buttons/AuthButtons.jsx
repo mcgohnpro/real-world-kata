@@ -8,7 +8,7 @@ export default function AuthButtons() {
       <Link className={styles['header-link']} to="/sign-in">
         Sign In
       </Link>
-      <Link to="/" className={[styles['header-link'], styles['header-link--success']].join(' ')}>
+      <Link to="/sign-up" className={[styles['header-link'], styles['header-link--success']].join(' ')}>
         Sign Up
       </Link>
     </div>

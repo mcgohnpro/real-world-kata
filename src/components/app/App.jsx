@@ -7,6 +7,7 @@ import { Spin } from 'antd'
 import Header from '../header'
 import ArticlesList from '../../pages/articles'
 import { loadArticles } from '../../store/slices/articleSlice'
+import { loadCurrentUser } from '../../store/slices/currentUserSlice'
 import ArticleListItem from '../article'
 import SignInForm from '../../pages/auth/sign-in'
 import SignUpForm from '../../pages/auth/sign-up'
@@ -21,6 +22,7 @@ function App() {
   useEffect(() => {
     if (!busy) {
       dispatch(loadArticles())
+      dispatch(loadCurrentUser())
     }
     return () => {
       busy = true

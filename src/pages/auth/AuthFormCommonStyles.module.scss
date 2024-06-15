@@ -39,7 +39,7 @@
   color: #262626;
 }
 
-.form-item-imput {
+.form-item-input {
   width: 320px;
   height: 40px;
   padding-inline: 12px;
@@ -50,6 +50,9 @@
   &::placeholder {
     font-size: 16px;
     color: #bfbfbf;
+  }
+  &.invalid {
+    border-color: $error-color;
   }
 }
 
@@ -93,6 +96,10 @@
   line-height: 157%;
   color: #595959;
   margin-bottom: 21px;
+  &.invalid {
+    text-decoration: underline;
+    color: $error-color;
+  }
 }
 
 .data-processing-checkbox {
@@ -117,4 +124,13 @@
   background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' version='1.1' id='svg48' sodipodi:docname='default_unchecked.svg' inkscape:version='1.2.2 (b0a8486541, 2022-12-01)' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns='http://www.w3.org/2000/svg' xmlns:svg='http://www.w3.org/2000/svg'%3E%3Cdefs id='defs52' /%3E%3Csodipodi:namedview id='namedview50' pagecolor='%23ffffff' bordercolor='%23000000' borderopacity='0.25' inkscape:showpageshadow='2' inkscape:pageopacity='0.0' inkscape:pagecheckerboard='0' inkscape:deskcolor='%23d1d1d1' showgrid='false' inkscape:zoom='26.15625' inkscape:cx='-2.8100358' inkscape:cy='8.0477897' inkscape:window-width='1920' inkscape:window-height='1018' inkscape:window-x='0' inkscape:window-y='0' inkscape:window-maximized='1' inkscape:current-layer='svg48' /%3E%3Crect x='0.5' y='0.5' width='15' height='15' rx='1.5' fill='%231890FF' stroke='%231890FF' id='rect44' /%3E%3Crect style='fill:%23ffffff;fill-opacity:1;stroke:none;stroke-width:1.2248;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill' id='rect666' width='14.845762' height='14.79166' x='0.57771301' y='0.52837217' rx='1.7395459' ry='1.7847537' /%3E%3C/svg%3E%0A");
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.validate-error {
+  margin-block: 0;
+  color: $error-color;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 157%;
+  max-width: 320px;
 }

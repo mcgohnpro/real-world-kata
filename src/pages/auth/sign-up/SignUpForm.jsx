@@ -1,61 +1,108 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { message } from 'antd'
 
+import Input from '../input-form-item'
 import styles from '../AuthFormCommonStyles.module.scss'
 
 export default function SignUpForm() {
-  const [check, setCheck] = useState(false)
-  const { register, handleSubmit } = useForm()
-
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    setValue,
+  } = useForm({ mode: 'onBlur' })
+  const onSubmit = (data) => {
+    console.log('📢[SignUpForm.jsx:15]: data: ', data)
+  }
   return (
-    <form className={styles['sign-in-form']}>
+    <form onSubmit={handleSubmit(onSubmit)} className={styles['sign-in-form']}>
       <h2 className={styles.title}>Create new account</h2>
-      <p className={styles['form-items-group']}>
-        <label className={styles['form-item-label']} htmlFor="username">
-          Username
-        </label>
-        <input className={styles['form-item-imput']} type="text" id="username" placeholder="Username" />
-      </p>
-      <p className={styles['form-items-group']}>
-        <label className={styles['form-item-label']} htmlFor="email-input">
-          Email address
-        </label>
-        <input className={styles['form-item-imput']} type="email" id="email-input" placeholder="Email address" />
-      </p>
-      <p className={styles['form-items-group']}>
-        <label className={styles['form-item-label']} htmlFor="password-input">
-          Password
-        </label>
-        <input className={styles['form-item-imput']} type="password" id="password-input" placeholder="Password" />
-      </p>
-      <p className={styles['form-items-group']}>
-        <label className={styles['form-item-label']} htmlFor="repeat-password-input">
-          Repeat Password
-        </label>
-        <input
-          className={styles['form-item-imput']}
-          type="password"
-          id="repeat-password-input"
-          placeholder="Password"
-        />
-      </p>
+      <Input
+        id="username"
+        label="Username"
+        register={register}
+        validation={{
+          required: 'Обязательное поле',
+          minLength: {
+            value: 3,
+            message: 'Поле должно содержать от 3 до 20 символов',
+          },
+          maxLength: {
+            value: 20,
+            message: 'Поле должно содержать от 3 до 20 символов',
+          },
+          onChange: (e) => {
+            setValue('username', e.target.value.trim())
+          },
+        }}
+        type="text"
+        placeholder="Username"
+        errors={errors}
+      />
+      <Input
+        id="email"
+        label="Email address"
+        register={register}
+        validation={{
+          required: 'Обязательное поле',
+          pattern: {
+            value:
+              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            message: 'Неверный email',
+          },
+        }}
+        type="email"
+        placeholder="Email address"
+        errors={errors}
+      />
+      <Input
+        id="password"
+        label="Password"
+        register={register}
+        validation={{
+          required: 'Обязательное поле',
+          minLength: {
+            value: 6,
+            message: 'Поле должно содержать от 6 до 40 символов',
+          },
+          maxLength: {
+            value: 40,
+            message: 'Поле должно содержать от 6 до 40 символов',
+          },
+        }}
+        type="password"
+        placeholder="Password"
+        errors={errors}
+      />
+      <Input
+        id="repeat-password"
+        label="Repeat Password"
+        register={register}
+        validation={{
+          required: 'Обязательное поле',
+          validate: (value, form) => value === form['password-input'] || 'Пароли не совпадают',
+        }}
+        type="password"
+        placeholder="Password"
+        errors={errors}
+      />
       <div className={styles.divider} />
-      <label className={styles['data-processing-checkbox-wrapper']} htmlFor="data-processing-checkbox">
+      <label
+        className={`${styles['data-processing-checkbox-wrapper']} ${errors['data-processing-input'] ? styles.invalid : null}`}
+        htmlFor="data-processing-checkbox"
+      >
         <div className={styles['data-processing-checkbox']}>
           <input
-            onChange={() => {
-              setCheck((prevState) => {
-                return !prevState
-              })
-            }}
+            {...register('data-processing', { required: true })}
             className={styles['data-processing-input']}
             type="checkbox"
             id="data-processing-checkbox"
-            checked={check}
           />
           <span className={styles['data-processing-decore']} />
         </div>
@@ -66,7 +113,7 @@ export default function SignUpForm() {
         <input className={styles['form-submit']} type="submit" value="Create" />
         <span className={styles['form-login-message']}>
           Already have an account?{' '}
-          <Link className={styles['form-login-message-link']} to="/">
+          <Link className={styles['form-login-message-link']} to="/sign-in">
             Sign In.
           </Link>
         </span>
