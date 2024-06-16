@@ -1,34 +1,50 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable no-unused-vars */
-import { Link } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 
-import { fetchRegisterNewUser } from '../../../api'
-import { addError } from '../../../store/slices/commonStateSlice'
 import Input from '../input-form-item'
 import styles from '../AuthFormCommonStyles.module.scss'
+import isValidHttpUrl from '../../../utils/isValidHttpUrl'
+import { fetchUpdateProfile } from '../../../api'
 import { updateCurrentUser } from '../../../store/slices/currentUserSlice'
 import translateResponse from '../../../utils/translateResponse'
+import { addError } from '../../../store/slices/commonStateSlice'
 
-export default function SignUpForm() {
+export default function EditProfileForm() {
+  const { username, email, image, token, authorized } = useSelector((store) => {
+    return store.currentUser
+  })
   const dispatch = useDispatch()
   const history = useHistory()
+
   const {
     register,
     setError,
     clearErrors,
+    reset,
     formState: { isSubmitted, errors },
     handleSubmit,
     setValue,
-  } = useForm({ mode: 'onBlur' })
+  } = useForm({
+    mode: 'onBlur',
+    defaultValues: {
+      username,
+      email,
+      image,
+    },
+  })
+
+  useEffect(() => {
+    setValue('username', username)
+    setValue('email', email)
+    setValue('image', image)
+  }, [username])
+
   const onSubmit = async (formData) => {
     try {
-      const data = await fetchRegisterNewUser(formData)
+      const data = await fetchUpdateProfile({ ...formData, token })
       data.user.authorized = true
       dispatch(updateCurrentUser(data))
       history.push('/')
@@ -54,7 +70,7 @@ export default function SignUpForm() {
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles['sign-in-form']}>
-      <h2 className={styles.title}>Create new account</h2>
+      <h2 className={styles.title}>Edit Profile</h2>
       <Input
         id="username"
         label="Username"
@@ -71,9 +87,6 @@ export default function SignUpForm() {
           },
           onChange: (e) => {
             setValue('username', e.target.value.trim())
-            if (isSubmitted && errors.username?.type === '422') {
-              clearErrors()
-            }
           },
         }}
         type="text"
@@ -91,11 +104,6 @@ export default function SignUpForm() {
               /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             message: 'Неверный email',
           },
-          onChange: (e) => {
-            if (isSubmitted && errors.email?.type === '422') {
-              clearErrors()
-            }
-          },
         }}
         type="email"
         placeholder="Email address"
@@ -103,7 +111,7 @@ export default function SignUpForm() {
       />
       <Input
         id="password"
-        label="Password"
+        label="New password"
         register={register}
         validation={{
           required: 'Обязательное поле',
@@ -117,46 +125,22 @@ export default function SignUpForm() {
           },
         }}
         type="password"
-        placeholder="Password"
+        placeholder="New password"
         errors={errors}
       />
       <Input
-        id="repeat-password"
-        label="Repeat Password"
+        id="image"
+        label="Avatar image (url)"
         register={register}
         validation={{
-          required: 'Обязательное поле',
-          validate: (value, form) => value === form.password || 'Пароли не совпадают',
+          validate: (url) => url === '' || isValidHttpUrl(url) || 'Некорректный URL',
         }}
-        type="password"
-        placeholder="Password"
+        type="url"
+        placeholder="Avatar image (url)"
         errors={errors}
       />
-      <div className={styles.divider} />
-      <label
-        className={`${styles['data-processing-checkbox-wrapper']} ${errors['data-processing'] ? styles.invalid : null}`}
-        htmlFor="data-processing-checkbox"
-      >
-        <div className={styles['data-processing-checkbox']}>
-          <input
-            {...register('data-processing', { required: true })}
-            className={styles['data-processing-input']}
-            type="checkbox"
-            id="data-processing-checkbox"
-          />
-          <span className={styles['data-processing-decore']} />
-        </div>
-        I agree to the processing of my personal <br />
-        information
-      </label>
       <p className={styles['form-items-group']}>
-        <input className={styles['form-submit']} type="submit" value="Create" />
-        <span className={styles['form-login-message']}>
-          Already have an account?{' '}
-          <Link className={styles['form-login-message-link']} to="/sign-in">
-            Sign In.
-          </Link>
-        </span>
+        <input className={styles['form-submit']} type="submit" value="Save" />
       </p>
     </form>
   )

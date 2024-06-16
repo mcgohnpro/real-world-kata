@@ -5,10 +5,13 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchCurrentUser } from '../../api'
 
-export const loadCurrentUser = createAsyncThunk('user/fetchCurrentUser', async () => {
-  const data = await fetchCurrentUser()
-  console.log('📢[currentUserSlice.js:10]: data: ', data)
-  return data
+export const loadCurrentUser = createAsyncThunk('user/fetchCurrentUser', async (userData, { rejectWithValue }) => {
+  try {
+    const data = await fetchCurrentUser()
+    return data
+  } catch (error) {
+    return rejectWithValue({ status: error.response.status })
+  }
 })
 
 const initialState = {
@@ -24,29 +27,37 @@ const currentUserSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    // TODO надо переименовать в логин, надо подумать
     updateCurrentUser: (state, action) => {
-      state.username = action.payload.user?.username
-      state.email = action.payload.user?.email
-      state.token = action.payload.user?.token
-      state.authorized = action.payload.user?.authorized
-      state.bio = action.payload.user?.bio
-      state.image = action.payload.user?.image
+      state.username = action.payload.user?.username || ''
+      state.email = action.payload.user?.email || ''
+      state.token = action.payload.user?.token || ''
+      state.authorized = action.payload.user?.authorized || false
+      state.bio = action.payload.user?.bio || ''
+      state.image = action.payload.user?.image || null
+    },
+    logOutCurrentUser: (state) => {
+      state.username = ''
+      state.email = ''
+      state.token = ''
+      state.authorized = false
+      state.bio = ''
+      state.image = null
     },
   },
   extraReducers: (builder) => {
     builder.addCase(loadCurrentUser.fulfilled, (state, action) => {
-      console.log('📢[currentUserSlice.js:38]: action: ', action)
-      state.username = action.payload.user?.username
-      state.email = action.payload.user?.email
-      state.token = action.payload.user?.token
-      state.authorized = action.payload.user?.authorized
-      state.bio = action.payload.user?.bio
-      state.image = action.payload.user?.image
+      state.username = action.payload.user?.username || ''
+      state.email = action.payload.user?.email || ''
+      state.token = action.payload.user?.token || ''
+      state.authorized = action.payload.user?.authorized || false
+      state.bio = action.payload.user?.bio || ''
+      state.image = action.payload.user?.image || null
     })
     builder.addCase(loadCurrentUser.rejected, (state, action) => {
       state.authorized = false
     })
   },
 })
-export const { updateCurrentUser } = currentUserSlice.actions
+export const { updateCurrentUser, logOutCurrentUser } = currentUserSlice.actions
 export default currentUserSlice.reducer

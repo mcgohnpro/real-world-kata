@@ -11,6 +11,7 @@ import { loadCurrentUser } from '../../store/slices/currentUserSlice'
 import ArticleListItem from '../article'
 import SignInForm from '../../pages/auth/sign-in'
 import SignUpForm from '../../pages/auth/sign-up'
+import EditProfileForm from '../../pages/auth/profile'
 
 import styles from './App.module.scss'
 
@@ -28,6 +29,13 @@ function App() {
       busy = true
     }
   }, [])
+
+  const { authorized } = useSelector((store) => {
+    return store.currentUser
+  })
+  const { loadingProfileData } = useSelector((store) => {
+    return store.commonState
+  })
 
   return (
     <Router>
@@ -58,6 +66,13 @@ function App() {
           />
           <Route exact path="/sign-in" component={SignInForm} />
           <Route exact path="/sign-up" component={SignUpForm} />
+          <Route
+            exact
+            path="/profile"
+            render={({ location, history, match }) => {
+              return <EditProfileForm />
+            }}
+          />
           <Redirect to="/" />
         </Switch>
       </main>

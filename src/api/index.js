@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 /* eslint-disable no-unused-vars */
 import ErrorFetchData from '../errors/errorFetchData'
 
@@ -45,13 +46,10 @@ export async function fetchCurrentUser() {
       data.user.authorized = true
       return data
     } catch (error) {
-      if (error.response.status === '401') {
-        return {
-          user: {
-            authorized: false,
-          },
-        }
+      if (error.response.status === 401) {
+        localStorage.removeItem('jwt-token')
       }
+      throw error
     }
   }
   return {
@@ -61,31 +59,73 @@ export async function fetchCurrentUser() {
   }
 }
 
-export async function fetchLogin(formData) {
+export async function fetchLogin({ email, password }) {
   const body = JSON.stringify({
     user: {
-      email: formData.email,
-      password: formData.password,
+      email,
+      password,
     },
   })
   const url = new URL(URL_API)
   url.pathname = ENDPOINTS.LOGIN
+  const data = await fetcher(url, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body,
+  })
+  localStorage.setItem('jwt-token', data.user.token)
+  return data
+}
+
+export async function fetchRegisterNewUser({ email, password, username }) {
+  const body = JSON.stringify({
+    user: {
+      email,
+      password,
+      username,
+    },
+  })
+  const url = new URL(URL_API)
+  url.pathname = ENDPOINTS.USERS
+  const data = await fetcher(url, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body,
+  })
+  localStorage.setItem('jwt-token', data.user.token)
+  return data
+}
+
+export async function fetchUpdateProfile({ email, password, username, image, token }) {
+  const url = new URL(URL_API)
+  url.pathname = ENDPOINTS.USER
+  const body = JSON.stringify({
+    user: {
+      email,
+      password,
+      username,
+      image,
+    },
+  })
   try {
     const data = await fetcher(url, {
-      method: 'post',
+      method: 'put',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body,
     })
     localStorage.setItem('jwt-token', data.user.token)
-    data.user.authorized = true
     return data
   } catch (error) {
-    return {
-      user: {
-        authorized: false,
-      },
+    if (error.response.status === 401) {
+      localStorage.removeItem('jwt-token')
     }
+    throw error
   }
 }

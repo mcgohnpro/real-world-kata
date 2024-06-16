@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
 import { fetchLogin } from '../../../api'
-import { updateCurrentUser } from '../../../store/slices/currentUserSlice'
+import { addError } from '../../../store/slices/commonStateSlice'
+import { updateCurrentUser, logOutCurrentUser } from '../../../store/slices/currentUserSlice'
 import Input from '../input-form-item'
 import styles from '../AuthFormCommonStyles.module.scss'
 
@@ -16,13 +17,39 @@ export default function SignInForm() {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
+    setError,
+    clearErrors,
+    formState: { errors, isSubmitted },
   } = useForm({ mode: 'onBlur' })
 
   const onSubmit = async (formData) => {
-    const data = await fetchLogin(formData)
-    dispatch(updateCurrentUser(data))
-    history.push('/')
+    localStorage.removeItem('jwt-token')
+    dispatch(logOutCurrentUser())
+    try {
+      const data = await fetchLogin(formData)
+      data.user.authorized = true
+      dispatch(updateCurrentUser(data))
+      history.push('/')
+    } catch ({ name, message, stack, response: { status, url } }) {
+      if (status === 422) {
+        setError('email')
+        setError(
+          'password',
+          { type: '422', message: 'Пожалуйста, укажите верные эл. почту и пароль' },
+          { shouldFocus: true }
+        )
+      } else {
+        dispatch(
+          addError({
+            name,
+            message,
+            stack,
+            status,
+            url,
+          })
+        )
+      }
+    }
   }
 
   return (
@@ -42,6 +69,11 @@ export default function SignInForm() {
               /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             message: 'Неверный email',
           },
+          onChange: (e) => {
+            if (isSubmitted && errors.email?.type === '422') {
+              clearErrors()
+            }
+          },
         }}
         type="email"
         placeholder="Email address"
@@ -53,6 +85,11 @@ export default function SignInForm() {
         register={register}
         validation={{
           required: 'Обязательное поле',
+          onChange: (e) => {
+            if (isSubmitted && errors.password?.type === '422') {
+              clearErrors()
+            }
+          },
         }}
         type="password"
         placeholder="Password"

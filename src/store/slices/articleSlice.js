@@ -1,13 +1,29 @@
+/* eslint-disable no-useless-catch */
+/* eslint-disable no-unused-vars */
+/* eslint-disable default-param-last */
 /* eslint-disable no-param-reassign */
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchArticles } from '../../api/index'
 
-export const loadArticles = createAsyncThunk('articles/fetchRecentArticles', async (offset = '0') => {
-  const data = await fetchArticles(offset)
-  return data
-})
+export const loadArticles = createAsyncThunk(
+  'articles/fetchRecentArticles',
+  async (offset = '0', { rejectWithValue }) => {
+    try {
+      const data = await fetchArticles(offset)
+      return data
+    } catch ({ name, message, stack, response: { status, url } }) {
+      return rejectWithValue({
+        name,
+        message,
+        stack,
+        status,
+        url,
+      })
+    }
+  }
+)
 
 const initialState = {
   articlesCount: 0,

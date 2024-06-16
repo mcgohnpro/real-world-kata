@@ -10,15 +10,20 @@ export default function ProfileAvatar({ author, date }) {
     <div className={styles['article-author-wrapper']}>
       <div className={styles['author-name-wrapper']}>
         <span className={styles['author-name']}>{username}</span>
-        <span className={styles['article-date']}>{format(date, 'MMMM d, yyyy')}</span>
+        {date ? <span className={styles['article-date']}>{format(date, 'MMMM d, yyyy')}</span> : null}
       </div>
-      <img src={image} alt="avatar" className={styles.avatar} />
+      {image ? <img src={image} alt="avatar" className={styles.avatar} /> : null}
     </div>
   )
 }
 
 ProfileAvatar.defaultProps = {
-  author: {},
+  author: {
+    username: '',
+    bio: '',
+    image: null,
+    following: false,
+  },
 }
 
 ProfileAvatar.propTypes = {
