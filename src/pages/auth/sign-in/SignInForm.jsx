@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable no-unused-vars */
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
@@ -10,9 +10,8 @@ import { updateCurrentUser, logOutCurrentUser } from '../../../store/slices/curr
 import Input from '../input-form-item'
 import styles from '../AuthFormCommonStyles.module.scss'
 
-export default function SignInForm() {
+export default function SignInForm({ history }) {
   const dispatch = useDispatch()
-  const history = useHistory()
   const {
     register,
     handleSubmit,
@@ -22,6 +21,7 @@ export default function SignInForm() {
     formState: { errors, isSubmitted },
   } = useForm({ mode: 'onBlur' })
 
+  // TODO вынести всю сложную логику наружу
   const onSubmit = async (formData) => {
     localStorage.removeItem('jwt-token')
     dispatch(logOutCurrentUser())
@@ -67,7 +67,7 @@ export default function SignInForm() {
           pattern: {
             value:
               /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-            message: 'Неверный email',
+            message: 'Некорректный email',
           },
           onChange: (e) => {
             if (isSubmitted && errors.email?.type === '422') {

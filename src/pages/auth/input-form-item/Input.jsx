@@ -1,27 +1,30 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
+// TODO переместить компонент в компоненты
 import PropTypes from 'prop-types'
 
 import styles from '../AuthFormCommonStyles.module.scss'
 
-export default function Input(props) {
-  const { id, label, register, validation, type, placeholder, errors } = props
-
+export default function Input({ field, label, id, placeholder, error, type }) {
+  // const { id, label, register, validation, type, placeholder, errors } = props
   return (
     <p className={styles['form-items-group']}>
       <label className={styles['form-item-label']} htmlFor={id}>
         {label}
       </label>
       <input
+        {...field}
+        id={id}
         // eslint-disable-next-line react/jsx-props-no-spreading
-        {...register(id, validation)}
-        className={`${styles['form-item-input']} ${errors[id] ? styles.invalid : null}`}
+        className={`${styles['form-item-input']} ${error ? styles.invalid : null}`}
         type={type}
         placeholder={placeholder}
       />
-      {errors[id] ? <span className={styles['validate-error']}>{errors[id].message}</span> : null}
+      {error ? <span className={styles['validate-error']}>{error.message}</span> : null}
     </p>
   )
 }
+
 // Input.defaultProps = {
 //   label: '',
 //   register: () => {},

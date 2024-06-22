@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
+/* eslint-disable react/jsx-props-no-spreading */
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Spin } from 'antd'
+import { useDispatch } from 'react-redux'
 
 import Header from '../header'
 import ArticlesList from '../../pages/articles'
@@ -12,10 +12,15 @@ import ArticleListItem from '../article'
 import SignInForm from '../../pages/auth/sign-in'
 import SignUpForm from '../../pages/auth/sign-up'
 import EditProfileForm from '../../pages/auth/profile'
+import PrivateRoute from '../private-route/PrivateRoute'
+import CreateArticle from '../../pages/create-article'
 
 import styles from './App.module.scss'
 
-// убрать в проде
+// TODO проверить все use селекторы, убрать всю деструктуризацию, привести к обычным переменным
+// TODO убрать в проде busy
+// TODO подумать как реализовать, чтобы загрузка показывалась, если только реально долго приходят данные, например через секунду
+
 let busy = false
 
 function App() {
@@ -29,13 +34,6 @@ function App() {
       busy = true
     }
   }, [])
-
-  const { authorized } = useSelector((store) => {
-    return store.currentUser
-  })
-  const { loadingProfileData } = useSelector((store) => {
-    return store.commonState
-  })
 
   return (
     <Router>
@@ -66,13 +64,8 @@ function App() {
           />
           <Route exact path="/sign-in" component={SignInForm} />
           <Route exact path="/sign-up" component={SignUpForm} />
-          <Route
-            exact
-            path="/profile"
-            render={({ location, history, match }) => {
-              return <EditProfileForm />
-            }}
-          />
+          <PrivateRoute exact path="/profile" component={EditProfileForm} />
+          <Route path="/new-article" component={CreateArticle} />
           <Redirect to="/" />
         </Switch>
       </main>

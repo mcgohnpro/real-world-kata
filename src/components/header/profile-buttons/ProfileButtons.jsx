@@ -15,7 +15,7 @@ export default function ProfileButtons() {
   })
   return (
     <div className={styles['profile-buttons-group']}>
-      <Link to="/" className={styles['create-article-link']}>
+      <Link to="/new-article" className={styles['create-article-link']}>
         Create article
       </Link>
       <Link className={styles['profile-link']} to="/profile">

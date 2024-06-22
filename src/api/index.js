@@ -129,3 +129,26 @@ export async function fetchUpdateProfile({ email, password, username, image, tok
     throw error
   }
 }
+
+export async function fetchCreateArticle({ title, description, body, tagList, token }) {
+  const requestBody = JSON.stringify({
+    article: {
+      title,
+      description,
+      body,
+      tagList: tagList.map((item) => item.tagName),
+    },
+  })
+  console.log('📢[index.js:142]: requestBody: ', requestBody)
+  const url = new URL(URL_API)
+  url.pathname = ENDPOINTS.ARTICLES
+  const data = await fetcher(url, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: requestBody,
+  })
+  return data
+}

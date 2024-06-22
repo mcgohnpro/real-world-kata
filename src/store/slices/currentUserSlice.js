@@ -9,6 +9,7 @@ export const loadCurrentUser = createAsyncThunk('user/fetchCurrentUser', async (
   try {
     const data = await fetchCurrentUser()
     return data
+    // FIXME возможно надо убрать данный фетч, так этот статус никуда не идет. Формат данных ошибки не единообразный
   } catch (error) {
     return rejectWithValue({ status: error.response.status })
   }

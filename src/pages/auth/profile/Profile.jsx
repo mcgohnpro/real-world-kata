@@ -2,7 +2,6 @@
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 
 import Input from '../input-form-item'
 import styles from '../AuthFormCommonStyles.module.scss'
@@ -12,12 +11,11 @@ import { updateCurrentUser } from '../../../store/slices/currentUserSlice'
 import translateResponse from '../../../utils/translateResponse'
 import { addError } from '../../../store/slices/commonStateSlice'
 
-export default function EditProfileForm() {
+export default function EditProfileForm({ history }) {
   const { username, email, image, token, authorized } = useSelector((store) => {
     return store.currentUser
   })
   const dispatch = useDispatch()
-  const history = useHistory()
 
   const {
     register,
@@ -102,7 +100,7 @@ export default function EditProfileForm() {
           pattern: {
             value:
               /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-            message: 'Неверный email',
+            message: 'Некорректный email',
           },
         }}
         type="email"

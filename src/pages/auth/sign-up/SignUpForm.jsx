@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 
 import { fetchRegisterNewUser } from '../../../api'
 import { addError } from '../../../store/slices/commonStateSlice'
@@ -15,9 +14,8 @@ import styles from '../AuthFormCommonStyles.module.scss'
 import { updateCurrentUser } from '../../../store/slices/currentUserSlice'
 import translateResponse from '../../../utils/translateResponse'
 
-export default function SignUpForm() {
+export default function SignUpForm({ history }) {
   const dispatch = useDispatch()
-  const history = useHistory()
   const {
     register,
     setError,
@@ -89,7 +87,7 @@ export default function SignUpForm() {
           pattern: {
             value:
               /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-            message: 'Неверный email',
+            message: 'Некорректный email',
           },
           onChange: (e) => {
             if (isSubmitted && errors.email?.type === '422') {

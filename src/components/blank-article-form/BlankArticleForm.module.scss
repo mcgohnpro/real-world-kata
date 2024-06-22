@@ -1,0 +1,82 @@
+@import '/src/styles/variables.scss';
+@import '/src/styles/mixins.scss';
+
+// TODO добавить реакцию на наведение на кнопки
+
+.title {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 140%;
+  text-align: center;
+  margin-block: 0;
+  margin-bottom: 21px;
+}
+
+.sign-in-form {
+  @include secondary-font-face;
+  background-color: $background-color-base;
+  width: 938px;
+  padding: 48px 32px;
+  margin-inline: auto;
+  border-radius: 6px;
+  box-sizing: border-box;
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.02),
+    0 1px 7px 0 rgba(0, 0, 0, 0.03),
+    0 3px 13px 0 rgba(0, 0, 0, 0.04),
+    0 5px 24px 0 rgba(0, 0, 0, 0.04),
+    0 9px 44px 0 rgba(0, 0, 0, 0.05),
+    0 22px 106px 0 rgba(0, 0, 0, 0.07);
+}
+
+.form-tags-header {
+  font-size: 14px;
+  line-height: 157%;
+  color: #262626;
+  margin-block: 0;
+  font-weight: 400;
+}
+.tag-list {
+  list-style-type: none;
+  padding-inline-start: 0;
+  margin-block: 0;
+}
+.form-item-input {
+  height: 40px;
+  width: 300px;
+  padding-inline: 12px;
+  border-radius: 5px;
+  border-color: #bfbfbf;
+  border-style: solid;
+  border-width: 1px;
+  box-sizing: border-box;
+  margin-right: 17px;
+  &::placeholder {
+    font-size: 16px;
+    color: #bfbfbf;
+  }
+  &.invalid {
+    border-color: $error-color;
+  }
+}
+
+.form-tags-wrapper {
+  margin-block: 0;
+  margin-bottom: 21px;
+}
+.form-items-group {
+  margin-block: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-submit {
+  border: none;
+  background-color: $primary-color;
+  height: 40px;
+  color: $background-color-base;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 300px;
+}
