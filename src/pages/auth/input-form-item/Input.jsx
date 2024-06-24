@@ -4,6 +4,7 @@
 import PropTypes from 'prop-types'
 
 import styles from '../AuthFormCommonStyles.module.scss'
+// TODO вынести все компоненты в компоненты, перенести общий файл стилей в папку со стилями
 
 export default function Input({ field, label, id, placeholder, error, type }) {
   // const { id, label, register, validation, type, placeholder, errors } = props

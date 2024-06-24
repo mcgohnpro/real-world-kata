@@ -1,7 +1,5 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
 import { fetchLogin } from '../../../api'
@@ -13,9 +11,8 @@ import styles from '../AuthFormCommonStyles.module.scss'
 export default function SignInForm({ history }) {
   const dispatch = useDispatch()
   const {
-    register,
     handleSubmit,
-    setValue,
+    control,
     setError,
     clearErrors,
     formState: { errors, isSubmitted },
@@ -55,11 +52,22 @@ export default function SignInForm({ history }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles['sign-in-form']}>
       <h2 className={styles.title}>Sign in</h2>
-      <Input
-        id="email"
-        label="Email address"
-        register={register}
-        validation={{
+      <Controller
+        render={({ field, fieldState: { error } }) => {
+          return (
+            <Input
+              field={field}
+              label="Email address"
+              id="email"
+              placeholder="Email address"
+              error={error}
+              type="email"
+            />
+          )
+        }}
+        name="email"
+        control={control}
+        rules={{
           required: {
             value: true,
             message: 'Обязательное поле',
@@ -69,31 +77,31 @@ export default function SignInForm({ history }) {
               /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             message: 'Некорректный email',
           },
-          onChange: (e) => {
+          onChange: () => {
             if (isSubmitted && errors.email?.type === '422') {
               clearErrors()
             }
           },
         }}
-        type="email"
-        placeholder="Email address"
-        errors={errors}
+        defaultValue=""
       />
-      <Input
-        id="password"
-        label="Password"
-        register={register}
-        validation={{
+      <Controller
+        render={({ field, fieldState: { error } }) => {
+          return (
+            <Input field={field} label="Password" id="password" placeholder="Password" error={error} type="password" />
+          )
+        }}
+        name="password"
+        control={control}
+        rules={{
           required: 'Обязательное поле',
-          onChange: (e) => {
+          onChange: () => {
             if (isSubmitted && errors.password?.type === '422') {
               clearErrors()
             }
           },
         }}
-        type="password"
-        placeholder="Password"
-        errors={errors}
+        defaultValue=""
       />
       <p className={styles['form-items-group']}>
         <input className={styles['form-submit']} type="submit" value="Login" />

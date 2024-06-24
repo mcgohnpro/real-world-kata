@@ -1,10 +1,5 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
 import { fetchRegisterNewUser } from '../../../api'
@@ -20,6 +15,7 @@ export default function SignUpForm({ history }) {
     register,
     setError,
     clearErrors,
+    control,
     formState: { isSubmitted, errors },
     handleSubmit,
     setValue,
@@ -53,11 +49,13 @@ export default function SignUpForm({ history }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles['sign-in-form']}>
       <h2 className={styles.title}>Create new account</h2>
-      <Input
-        id="username"
-        label="Username"
-        register={register}
-        validation={{
+      <Controller
+        render={({ field, fieldState: { error } }) => {
+          return <Input field={field} label="Username" id="username" placeholder="Username" error={error} type="text" />
+        }}
+        name="username"
+        control={control}
+        rules={{
           required: 'Обязательное поле',
           minLength: {
             value: 3,
@@ -74,36 +72,47 @@ export default function SignUpForm({ history }) {
             }
           },
         }}
-        type="text"
-        placeholder="Username"
-        errors={errors}
+        defaultValue=""
       />
-      <Input
-        id="email"
-        label="Email address"
-        register={register}
-        validation={{
+      <Controller
+        render={({ field, fieldState: { error } }) => {
+          return (
+            <Input
+              field={field}
+              label="Email address"
+              id="email"
+              placeholder="Email address"
+              error={error}
+              type="email"
+            />
+          )
+        }}
+        name="email"
+        control={control}
+        rules={{
           required: 'Обязательное поле',
           pattern: {
             value:
               /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             message: 'Некорректный email',
           },
-          onChange: (e) => {
+          onChange: () => {
             if (isSubmitted && errors.email?.type === '422') {
               clearErrors()
             }
           },
         }}
-        type="email"
-        placeholder="Email address"
-        errors={errors}
+        defaultValue=""
       />
-      <Input
-        id="password"
-        label="Password"
-        register={register}
-        validation={{
+      <Controller
+        render={({ field, fieldState: { error } }) => {
+          return (
+            <Input field={field} label="Password" id="password" placeholder="Password" error={error} type="password" />
+          )
+        }}
+        name="password"
+        control={control}
+        rules={{
           required: 'Обязательное поле',
           minLength: {
             value: 6,
@@ -114,21 +123,28 @@ export default function SignUpForm({ history }) {
             message: 'Поле должно содержать от 6 до 40 символов',
           },
         }}
-        type="password"
-        placeholder="Password"
-        errors={errors}
+        defaultValue=""
       />
-      <Input
-        id="repeat-password"
-        label="Repeat Password"
-        register={register}
-        validation={{
+      <Controller
+        render={({ field, fieldState: { error } }) => {
+          return (
+            <Input
+              field={field}
+              label="Repeat Password"
+              id="repeat-password"
+              placeholder="Password"
+              error={error}
+              type="password"
+            />
+          )
+        }}
+        name="repeat-password"
+        control={control}
+        rules={{
           required: 'Обязательное поле',
           validate: (value, form) => value === form.password || 'Пароли не совпадают',
         }}
-        type="password"
-        placeholder="Password"
-        errors={errors}
+        defaultValue=""
       />
       <div className={styles.divider} />
       <label
@@ -137,6 +153,7 @@ export default function SignUpForm({ history }) {
       >
         <div className={styles['data-processing-checkbox']}>
           <input
+            // eslint-disable-next-line react/jsx-props-no-spreading
             {...register('data-processing', { required: true })}
             className={styles['data-processing-input']}
             type="checkbox"

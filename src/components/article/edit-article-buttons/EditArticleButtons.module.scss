@@ -1,0 +1,38 @@
+@import '/src/styles/variables.scss';
+
+.edit-article-buttons-wrapper {
+  display: flex;
+  gap: 12px;
+}
+
+button.edit-article-button {
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.edit-article-button {
+  display: flex;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 157%;
+  text-decoration: none;
+  border-radius: 5px;
+  align-items: center;
+  padding-inline: 20px;
+  justify-content: center;
+  width: fit-content;
+  &--delete {
+    color: $error-color;
+    border: 1px solid $error-color;
+    &:visited {
+      color: $error-color;
+    }
+  }
+  &--edit {
+    color: $success-color;
+    border: 1px solid $success-color;
+    &:visited {
+      color: $success-color;
+    }
+  }
+}

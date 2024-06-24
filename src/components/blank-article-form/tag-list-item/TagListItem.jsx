@@ -5,7 +5,7 @@ import { useState } from 'react'
 import styles from './TagListItem.module.scss'
 
 // TODO добавить дефолтные пропсы и проптайпсы
-export default function TagListItem({ value: { tagName }, onChange, onBlur, addTag }) {
+export default function TagListItem({ value: { tagName }, onChange, onBlur, addTag, removeTag, index }) {
   return (
     <li className={styles['tag-list-item']}>
       <input
@@ -18,7 +18,14 @@ export default function TagListItem({ value: { tagName }, onChange, onBlur, addT
         placeholder="Tag"
         className={styles['form-item-input']}
       />
-      <input value="Delete" type="button" className={`${styles['form-button']} ${styles['form-button--remove']}`} />
+      <input
+        onClick={() => {
+          removeTag(index)
+        }}
+        value="Delete"
+        type="button"
+        className={`${styles['form-button']} ${styles['form-button--remove']}`}
+      />
       <input
         onClick={() => {
           addTag({ tagName })
@@ -30,4 +37,8 @@ export default function TagListItem({ value: { tagName }, onChange, onBlur, addT
       />
     </li>
   )
+}
+
+TagListItem.defaultProps = {
+  removeTag: () => {},
 }

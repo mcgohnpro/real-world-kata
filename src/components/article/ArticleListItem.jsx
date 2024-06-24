@@ -1,16 +1,21 @@
 /* eslint-disable no-unused-vars */
-import { Link } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 import { Skeleton } from 'antd'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
-import ProfileAvatar from '../profile-avatar'
-import getId from '../../utils/idGenerators'
 import { fetchArticleBySlug } from '../../api'
+import getId from '../../utils/idGenerators'
+import ProfileAvatar from '../profile-avatar'
 
 import styles from './ArticleListItem.module.scss'
+import EditArticleButtons from './edit-article-buttons'
 
 export default function ArticleListItem({ articleId, withBody }) {
   const [article, setArticle] = useState()
+  const currentUser = useSelector((store) => store.currentUser.username)
+
+  // FIXME что за fetchedArticle, переименовать в респонс
   useEffect(() => {
     fetchArticleBySlug(articleId).then((fetchedArticle) => {
       setArticle(fetchedArticle)
@@ -50,7 +55,10 @@ export default function ArticleListItem({ articleId, withBody }) {
           </ul>
           <p className={styles.annotation}>{description}</p>
         </div>
-        <ProfileAvatar author={author} date={createdAt} />
+        <div className={styles['article-profile-wrapper']}>
+          <ProfileAvatar author={author} date={createdAt} />
+          <EditArticleButtons author={author} currentUser={currentUser} />
+        </div>
       </div>
       {articleBody}
     </article>

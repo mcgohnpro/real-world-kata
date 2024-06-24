@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 
@@ -12,20 +12,12 @@ import translateResponse from '../../../utils/translateResponse'
 import { addError } from '../../../store/slices/commonStateSlice'
 
 export default function EditProfileForm({ history }) {
-  const { username, email, image, token, authorized } = useSelector((store) => {
+  const { username, email, image, token } = useSelector((store) => {
     return store.currentUser
   })
   const dispatch = useDispatch()
 
-  const {
-    register,
-    setError,
-    clearErrors,
-    reset,
-    formState: { isSubmitted, errors },
-    handleSubmit,
-    setValue,
-  } = useForm({
+  const { setError, control, handleSubmit, setValue } = useForm({
     mode: 'onBlur',
     defaultValues: {
       username,
@@ -33,12 +25,6 @@ export default function EditProfileForm({ history }) {
       image,
     },
   })
-
-  useEffect(() => {
-    setValue('username', username)
-    setValue('email', email)
-    setValue('image', image)
-  }, [username])
 
   const onSubmit = async (formData) => {
     try {
@@ -66,14 +52,17 @@ export default function EditProfileForm({ history }) {
       }
     }
   }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles['sign-in-form']}>
       <h2 className={styles.title}>Edit Profile</h2>
-      <Input
-        id="username"
-        label="Username"
-        register={register}
-        validation={{
+      <Controller
+        render={({ field, fieldState: { error } }) => {
+          return <Input field={field} label="Username" id="username" placeholder="Username" error={error} type="text" />
+        }}
+        name="username"
+        control={control}
+        rules={{
           required: 'Обязательное поле',
           minLength: {
             value: 3,
@@ -87,15 +76,25 @@ export default function EditProfileForm({ history }) {
             setValue('username', e.target.value.trim())
           },
         }}
-        type="text"
-        placeholder="Username"
-        errors={errors}
+        defaultValue=""
       />
-      <Input
-        id="email"
-        label="Email address"
-        register={register}
-        validation={{
+
+      <Controller
+        render={({ field, fieldState: { error } }) => {
+          return (
+            <Input
+              field={field}
+              label="Email address"
+              id="email"
+              placeholder="Email address"
+              error={error}
+              type="email"
+            />
+          )
+        }}
+        name="email"
+        control={control}
+        rules={{
           required: 'Обязательное поле',
           pattern: {
             value:
@@ -103,15 +102,25 @@ export default function EditProfileForm({ history }) {
             message: 'Некорректный email',
           },
         }}
-        type="email"
-        placeholder="Email address"
-        errors={errors}
+        defaultValue=""
       />
-      <Input
-        id="password"
-        label="New password"
-        register={register}
-        validation={{
+
+      <Controller
+        render={({ field, fieldState: { error } }) => {
+          return (
+            <Input
+              field={field}
+              label="New password"
+              id="password"
+              placeholder="New password"
+              error={error}
+              type="password"
+            />
+          )
+        }}
+        name="password"
+        control={control}
+        rules={{
           required: 'Обязательное поле',
           minLength: {
             value: 6,
@@ -122,21 +131,30 @@ export default function EditProfileForm({ history }) {
             message: 'Поле должно содержать от 6 до 40 символов',
           },
         }}
-        type="password"
-        placeholder="New password"
-        errors={errors}
+        defaultValue=""
       />
-      <Input
-        id="image"
-        label="Avatar image (url)"
-        register={register}
-        validation={{
+
+      <Controller
+        render={({ field, fieldState: { error } }) => {
+          return (
+            <Input
+              field={field}
+              label="Avatar image (url)"
+              id="image"
+              placeholder="Avatar image (url)"
+              error={error}
+              type="url"
+            />
+          )
+        }}
+        name="image"
+        control={control}
+        rules={{
           validate: (url) => url === '' || isValidHttpUrl(url) || 'Некорректный URL',
         }}
-        type="url"
-        placeholder="Avatar image (url)"
-        errors={errors}
+        defaultValue=""
       />
+
       <p className={styles['form-items-group']}>
         <input className={styles['form-submit']} type="submit" value="Save" />
       </p>

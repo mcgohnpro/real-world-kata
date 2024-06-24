@@ -14,6 +14,7 @@ import SignUpForm from '../../pages/auth/sign-up'
 import EditProfileForm from '../../pages/auth/profile'
 import PrivateRoute from '../private-route/PrivateRoute'
 import CreateArticle from '../../pages/create-article'
+import EditArticle from '../../pages/edit-article'
 
 import styles from './App.module.scss'
 
@@ -60,6 +61,13 @@ function App() {
             render={({ match }) => {
               const { slug } = match.params
               return <ArticleListItem articleId={slug} withBody />
+            }}
+          />
+          <Route
+            exact
+            path="/articles/:slug/edit"
+            render={(routeProps) => {
+              return <EditArticle routeProps={routeProps} />
             }}
           />
           <Route exact path="/sign-in" component={SignInForm} />

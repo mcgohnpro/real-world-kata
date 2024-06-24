@@ -100,7 +100,8 @@ export async function fetchRegisterNewUser({ email, password, username }) {
   return data
 }
 
-export async function fetchUpdateProfile({ email, password, username, image, token }) {
+export async function fetchUpdateProfile(formData) {
+  const { email, password, username, image, token } = formData
   const url = new URL(URL_API)
   url.pathname = ENDPOINTS.USER
   const body = JSON.stringify({
@@ -139,11 +140,33 @@ export async function fetchCreateArticle({ title, description, body, tagList, to
       tagList: tagList.map((item) => item.tagName),
     },
   })
-  console.log('📢[index.js:142]: requestBody: ', requestBody)
   const url = new URL(URL_API)
   url.pathname = ENDPOINTS.ARTICLES
   const data = await fetcher(url, {
     method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: requestBody,
+  })
+  return data
+}
+
+export async function fetchUpdateArticle(formData, slug) {
+  const { title, description, body, tagList, token } = formData
+  const requestBody = JSON.stringify({
+    article: {
+      title,
+      description,
+      body,
+      tagList: tagList.map((item) => item.tagName),
+    },
+  })
+  const url = new URL(URL_API)
+  url.pathname = `${ENDPOINTS.ARTICLES}/${slug}`
+  const data = await fetcher(url, {
+    method: 'put',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
