@@ -1,4 +1,3 @@
-// TODO вытащить ее в UTILS
 function isValidHttpUrl(url) {
   try {
     const newUrl = new URL(url)

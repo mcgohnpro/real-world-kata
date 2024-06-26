@@ -1,6 +1,5 @@
 @import '/src/styles/variables.scss';
 @import '/src/styles/mixins.scss';
-//TODO цвета вынести в переменную
 .sign-in-form {
   @include secondary-font-face;
   background-color: $background-color-base;

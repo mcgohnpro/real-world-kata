@@ -7,9 +7,7 @@ import styles from './Header.module.scss'
 import ProfileButtons from './profile-buttons'
 
 export default function Header() {
-  const { authorized } = useSelector((store) => {
-    return store.currentUser
-  })
+  const authorized = useSelector((store) => store.currentUser.authorized)
   return (
     <header className={styles.header}>
       <Link className={styles['home-link']} to="/">

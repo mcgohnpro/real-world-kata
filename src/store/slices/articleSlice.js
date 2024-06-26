@@ -1,5 +1,3 @@
-/* eslint-disable no-useless-catch */
-/* eslint-disable no-unused-vars */
 /* eslint-disable default-param-last */
 /* eslint-disable no-param-reassign */
 
@@ -33,6 +31,11 @@ const initialState = {
 const articlesSlice = createSlice({
   name: 'articles',
   initialState,
+  reducers: {
+    clearArticleList(state) {
+      state.articles = []
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(loadArticles.fulfilled, (state, action) => {
       state.articles = action.payload.articles.map((article) => article.slug)
@@ -40,5 +43,7 @@ const articlesSlice = createSlice({
     })
   },
 })
+
+export const { clearArticleList } = articlesSlice.actions
 
 export default articlesSlice.reducer

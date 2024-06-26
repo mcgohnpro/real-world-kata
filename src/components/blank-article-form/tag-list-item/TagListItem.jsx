@@ -1,10 +1,7 @@
-/* eslint-disable no-unused-vars */
 import PropTypes from 'prop-types'
-import { useState } from 'react'
 
 import styles from './TagListItem.module.scss'
 
-// TODO добавить дефолтные пропсы и проптайпсы
 export default function TagListItem({ value: { tagName }, onChange, onBlur, addTag, removeTag, index }) {
   return (
     <li className={styles['tag-list-item']}>
@@ -41,4 +38,18 @@ export default function TagListItem({ value: { tagName }, onChange, onBlur, addT
 
 TagListItem.defaultProps = {
   removeTag: () => {},
+  tagName: '',
+  onChange: () => {},
+  onBlur: () => {},
+  addTag: () => {},
+  index: 0,
+}
+
+TagListItem.propTypes = {
+  removeTag: PropTypes.func,
+  tagName: PropTypes.string,
+  onChange: PropTypes.func,
+  onBlur: PropTypes.func,
+  addTag: PropTypes.func,
+  index: PropTypes.number,
 }

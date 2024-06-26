@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import PropTypes from 'prop-types'
 import { useFieldArray, useForm, Controller } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -130,4 +131,12 @@ export default function BlankArticleForm({ title, defaultValues }) {
       </p>
     </form>
   )
+}
+
+BlankArticleForm.defaultProps = {
+  title: '',
+}
+
+BlankArticleForm.propTypes = {
+  title: PropTypes.string,
 }

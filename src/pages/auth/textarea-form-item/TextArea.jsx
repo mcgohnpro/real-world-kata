@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import styles from '../AuthFormCommonStyles.module.scss'
 
-// TODO проверить почему не работает валидация
 export default function TextArea({ field, label, id, placeholder, error }) {
   return (
     <p className={styles['form-items-group']}>

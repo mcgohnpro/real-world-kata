@@ -1,13 +1,10 @@
 /* eslint-disable no-param-reassign */
-/* eslint-disable no-unused-vars */
 import { createSlice } from '@reduxjs/toolkit'
 
 import { loadArticles } from './articleSlice'
-import { loadCurrentUser } from './currentUserSlice'
 
 const initialState = {
   loading: false,
-  loadingProfileData: false,
   errors: [],
 }
 
@@ -27,16 +24,6 @@ const commonStateSlice = createSlice({
       state.loading = true
     })
     builder.addCase(loadArticles.rejected, (state, action) => {
-      state.loading = false
-      state.errors.push(action.payload)
-    })
-    builder.addCase(loadCurrentUser.fulfilled, (state) => {
-      state.loadingProfileData = false
-    })
-    builder.addCase(loadCurrentUser.pending, (state) => {
-      state.loadingProfileData = true
-    })
-    builder.addCase(loadCurrentUser.rejected, (state, action) => {
       state.loading = false
       state.errors.push(action.payload)
     })

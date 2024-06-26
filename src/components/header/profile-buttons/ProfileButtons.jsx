@@ -10,9 +10,10 @@ import styles from './ProfileButtons.module.scss'
 
 export default function ProfileButtons() {
   const dispatch = useDispatch()
-  const { username, image } = useSelector((store) => {
-    return store.currentUser
-  })
+
+  const username = useSelector((store) => store.currentUser.username)
+  const image = useSelector((store) => store.currentUser.image)
+
   return (
     <div className={styles['profile-buttons-group']}>
       <Link to="/new-article" className={styles['create-article-link']}>

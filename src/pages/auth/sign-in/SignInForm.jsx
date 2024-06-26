@@ -18,7 +18,6 @@ export default function SignInForm({ history }) {
     formState: { errors, isSubmitted },
   } = useForm({ mode: 'onBlur' })
 
-  // TODO вынести всю сложную логику наружу
   const onSubmit = async (formData) => {
     localStorage.removeItem('jwt-token')
     dispatch(logOutCurrentUser())

@@ -1,39 +1,26 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/jsx-props-no-spreading */
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { Redirect, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 
-import Header from '../header'
 import ArticlesList from '../../pages/articles'
+import EditProfileForm from '../../pages/auth/profile'
+import SignInForm from '../../pages/auth/sign-in'
+import SignUpForm from '../../pages/auth/sign-up'
+import CreateArticle from '../../pages/create-article'
+import EditArticle from '../../pages/edit-article'
 import { loadArticles } from '../../store/slices/articleSlice'
 import { loadCurrentUser } from '../../store/slices/currentUserSlice'
 import ArticleListItem from '../article'
-import SignInForm from '../../pages/auth/sign-in'
-import SignUpForm from '../../pages/auth/sign-up'
-import EditProfileForm from '../../pages/auth/profile'
+import Header from '../header'
 import PrivateRoute from '../private-route/PrivateRoute'
-import CreateArticle from '../../pages/create-article'
-import EditArticle from '../../pages/edit-article'
 
 import styles from './App.module.scss'
-
-// TODO проверить все use селекторы, убрать всю деструктуризацию, привести к обычным переменным
-// TODO убрать в проде busy
-// TODO подумать как реализовать, чтобы загрузка показывалась, если только реально долго приходят данные, например через секунду
-
-let busy = false
 
 function App() {
   const dispatch = useDispatch()
   useEffect(() => {
-    if (!busy) {
-      dispatch(loadArticles())
-      dispatch(loadCurrentUser())
-    }
-    return () => {
-      busy = true
-    }
+    dispatch(loadArticles())
+    dispatch(loadCurrentUser())
   }, [])
 
   return (

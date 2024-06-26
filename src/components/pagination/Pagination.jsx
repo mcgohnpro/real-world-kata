@@ -1,20 +1,20 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
 import { useQuery } from '../../hooks'
 
 import styles from './Pagination.module.scss'
-// TODO косяк со startPage, обнуляется, так как размонтируется main
-// TODO сделать так, чтобы нельязя было перейти на несуществующую страницу
-// TODO не должно уменьшаться количество страниц при подходе к последним
+
 export default function Pagination() {
   const history = useHistory()
-  const { articlesCount } = useSelector((store) => {
-    return store.articles
-  })
+  const articlesCount = useSelector((store) => store.articles.articlesCount)
   const query = useQuery()
   const currentPage = Number(query.get('page')) || 1
+
+  if (Math.sign(currentPage) === -1) {
+    history.push('/articles/?page=1')
+  }
 
   const [startPage, setStartPage] = useState(0)
 
@@ -25,6 +25,12 @@ export default function Pagination() {
     }
     return arr
   }, [articlesCount])
+
+  useEffect(() => {
+    if (pages.length && currentPage > pages.length) {
+      history.push(`/articles/?page=${pages.length}`)
+    }
+  }, [pages])
 
   if (currentPage > startPage + 5) {
     setStartPage(currentPage - 1)
@@ -53,7 +59,7 @@ export default function Pagination() {
             }}
             key={page}
             type="button"
-            aria-label="page number button"
+            aria-label={`page number ${page} button`}
             className={page === currentPage ? [styles['page-button'], styles.current].join(' ') : styles['page-button']}
           >
             {page}
@@ -67,6 +73,7 @@ export default function Pagination() {
         onClick={() => {
           history.push(`/articles/?page=${currentPage + 1}`)
         }}
+        disabled={currentPage >= pages.length}
       />
     </div>
   )

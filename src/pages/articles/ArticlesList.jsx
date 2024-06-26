@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { Spin } from 'antd'
@@ -14,6 +13,9 @@ export default function ArticlesList() {
   const { loading } = useSelector((store) => store.commonState)
   const dispatch = useDispatch()
   const query = useQuery()
+  const { articles, articlesCount } = useSelector((store) => {
+    return store.articles
+  })
 
   useEffect(() => {
     const page = query.get('page')
@@ -23,10 +25,6 @@ export default function ArticlesList() {
       dispatch(loadArticles())
     }
   }, [query])
-
-  const { articles, articlesCount } = useSelector((store) => {
-    return store.articles
-  })
 
   const articlesList = (
     <ul className={styles['articles-list']}>

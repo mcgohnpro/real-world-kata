@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-vars */
 import { useForm, Controller } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
 
 import Input from '../input-form-item'
 import styles from '../AuthFormCommonStyles.module.scss'

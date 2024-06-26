@@ -1,5 +1,3 @@
-/* eslint-disable no-useless-catch */
-/* eslint-disable no-unused-vars */
 import ErrorFetchData from '../errors/errorFetchData'
 
 import { URL_API, ENDPOINTS } from './constants'
@@ -7,10 +5,13 @@ import { URL_API, ENDPOINTS } from './constants'
 async function fetcher(url, options = {}) {
   const response = await fetch(url, options)
   if (response.ok) {
-    const data = await response.json()
-    return data
+    if (response.status !== 204) {
+      const data = await response.json()
+      return data
+    }
+    return {}
   }
-  const error = new ErrorFetchData('Error fetch data', response)
+  const error = new ErrorFetchData(`Error fetch data, status code is ${response.status}`, response)
   throw error
 }
 
@@ -23,10 +24,14 @@ export async function fetchArticles(offset) {
   return data
 }
 
-export async function fetchArticleBySlug(slug) {
+export async function fetchArticleBySlug(slug, token) {
   const url = new URL(URL_API)
   url.pathname = `${ENDPOINTS.ARTICLES}/${slug}`
-  const data = await fetcher(url)
+  const data = await fetcher(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
   return data.article
 }
 
@@ -174,4 +179,42 @@ export async function fetchUpdateArticle(formData, slug) {
     body: requestBody,
   })
   return data
+}
+
+export async function fetchDeleteArticle(slug, token) {
+  const url = new URL(URL_API)
+  url.pathname = `${ENDPOINTS.ARTICLES}/${slug}`
+  await fetcher(url, {
+    method: 'delete',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
+export async function fetchFavoriteArticleBySlug(slug, token) {
+  const url = new URL(URL_API)
+  url.pathname = `${ENDPOINTS.ARTICLES}/${slug}/favorite`
+  const data = await fetcher(url, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return data.article
+}
+
+export async function fetchUnfavoriteArticleBySlug(slug, token) {
+  const url = new URL(URL_API)
+  url.pathname = `${ENDPOINTS.ARTICLES}/${slug}/favorite`
+  const data = await fetcher(url, {
+    method: 'delete',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return data.article
 }
