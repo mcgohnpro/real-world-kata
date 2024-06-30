@@ -8,6 +8,7 @@ import Input from '../input-form-item'
 import styles from '../AuthFormCommonStyles.module.scss'
 import { updateCurrentUser } from '../../../store/slices/currentUserSlice'
 import translateResponse from '../../../utils/translateResponse'
+import { ROUTE_PATH } from '../../../constants/routes-constants'
 
 export default function SignUpForm({ history }) {
   const dispatch = useDispatch()
@@ -25,7 +26,7 @@ export default function SignUpForm({ history }) {
       const data = await fetchRegisterNewUser(formData)
       data.user.authorized = true
       dispatch(updateCurrentUser(data))
-      history.push('/')
+      history.push(ROUTE_PATH.ROOT_PATH)
     } catch ({ name, message, stack, response, response: { status, url } }) {
       if (status === 422) {
         const errorData = await response.json()
@@ -168,7 +169,7 @@ export default function SignUpForm({ history }) {
         <input className={styles['form-submit']} type="submit" value="Create" />
         <span className={styles['form-login-message']}>
           Already have an account?{' '}
-          <Link className={styles['form-login-message-link']} to="/sign-in">
+          <Link className={styles['form-login-message-link']} to={ROUTE_PATH.SIGN_IN}>
             Sign In.
           </Link>
         </span>

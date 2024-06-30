@@ -8,6 +8,7 @@ import { fetchUpdateProfile } from '../../../api'
 import { updateCurrentUser } from '../../../store/slices/currentUserSlice'
 import translateResponse from '../../../utils/translateResponse'
 import { addError } from '../../../store/slices/commonStateSlice'
+import { ROUTE_PATH } from '../../../constants/routes-constants'
 
 export default function EditProfileForm({ history }) {
   const { username, email, image, token } = useSelector((store) => {
@@ -29,7 +30,7 @@ export default function EditProfileForm({ history }) {
       const data = await fetchUpdateProfile({ ...formData, token })
       data.user.authorized = true
       dispatch(updateCurrentUser(data))
-      history.push('/')
+      history.push(ROUTE_PATH.ROOT_PATH)
     } catch ({ name, message, stack, response, response: { status, url } }) {
       if (status === 422) {
         const errorData = await response.json()

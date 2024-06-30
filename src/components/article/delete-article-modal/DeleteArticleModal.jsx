@@ -4,6 +4,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom
 
 import { fetchDeleteArticle } from '../../../api'
 import { addError } from '../../../store/slices/commonStateSlice'
+import { ROUTE_PATH } from '../../../constants/routes-constants'
 
 import styles from './DeleteArticleModal.module.scss'
 
@@ -53,7 +54,7 @@ export default function DeleteArticleModal({ setShowDeleteArticleModal }) {
                 })
               )
             }
-            history.push('/')
+            history.push(ROUTE_PATH.ROOT_PATH)
           }}
           className={`${styles['modal-button']} ${styles['modal-button--confirm']}`}
           type="button"

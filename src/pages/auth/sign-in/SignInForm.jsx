@@ -7,6 +7,7 @@ import { addError } from '../../../store/slices/commonStateSlice'
 import { updateCurrentUser, logOutCurrentUser } from '../../../store/slices/currentUserSlice'
 import Input from '../input-form-item'
 import styles from '../AuthFormCommonStyles.module.scss'
+import { ROUTE_PATH } from '../../../constants/routes-constants'
 
 export default function SignInForm({ history }) {
   const dispatch = useDispatch()
@@ -25,7 +26,7 @@ export default function SignInForm({ history }) {
       const data = await fetchLogin(formData)
       data.user.authorized = true
       dispatch(updateCurrentUser(data))
-      history.push('/')
+      history.push(ROUTE_PATH.ROOT_PATH)
     } catch ({ name, message, stack, response: { status, url } }) {
       if (status === 422) {
         setError('email')
@@ -106,7 +107,7 @@ export default function SignInForm({ history }) {
         <input className={styles['form-submit']} type="submit" value="Login" />
         <span className={styles['form-login-message']}>
           Don&apos;t have an account?{' '}
-          <Link className={styles['form-login-message-link']} to="/sign-up">
+          <Link className={styles['form-login-message-link']} to={ROUTE_PATH.SIGN_UP}>
             Sign Up.
           </Link>
         </span>

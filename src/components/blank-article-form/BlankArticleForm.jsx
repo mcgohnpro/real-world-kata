@@ -9,14 +9,23 @@ import Input from '../../pages/auth/input-form-item/Input'
 import TextArea from '../../pages/auth/textarea-form-item'
 import { fetchCreateArticle, fetchUpdateArticle } from '../../api'
 import { addError } from '../../store/slices/commonStateSlice'
+import { ROUTE_PATH, ROUTE_PATH_TEMPLATES } from '../../constants/routes-constants'
 
 import styles from './BlankArticleForm.module.scss'
 import TagListItem from './tag-list-item'
 
 export default function BlankArticleForm({ title, defaultValues }) {
-  const { handleSubmit, control, setError } = useForm({ mode: 'onBlur', defaultValues })
+  const { handleSubmit, control, setError } = useForm({
+    mode: 'onBlur',
+
+    defaultValues: {
+      ...defaultValues,
+      tagList: defaultValues?.tagList.length ? defaultValues.tagList : [{ tagName: '' }],
+    },
+  })
   const token = useSelector((store) => store.currentUser.token)
   const history = useHistory()
+
   const {
     path,
     params: { slug },
@@ -25,18 +34,21 @@ export default function BlankArticleForm({ title, defaultValues }) {
   const { fields, append, remove } = useFieldArray({ control, name: 'tagList' })
 
   const onSubmit = async (formData) => {
+    if (formData.tagList.at(-1).tagName === '') {
+      formData.tagList.pop()
+    }
     try {
-      if (path === '/new-article') {
+      if (path === ROUTE_PATH.NEW_ARTICLE) {
         await fetchCreateArticle({ ...formData, token })
-        history.push('/')
-      } else if (path === '/articles/:slug/edit') {
+        history.push(ROUTE_PATH.ROOT_PATH)
+      } else if (path === ROUTE_PATH.EDIT_ARTICLE) {
         await fetchUpdateArticle({ ...formData, token }, slug)
-        history.push(`/articles/${slug}`)
+        history.push(ROUTE_PATH_TEMPLATES.ARTICLE_WITH_SLUG(slug))
       }
     } catch ({ name, message, stack, response, response: { status, url } }) {
       switch (status) {
         case 401:
-          history.push('/')
+          history.push(ROUTE_PATH.ROOT_PATH)
           break
         case 422:
           {
@@ -107,7 +119,15 @@ export default function BlankArticleForm({ title, defaultValues }) {
               <Controller
                 render={({ field: { onChange, onBlur, value } }) => {
                   return (
-                    <TagListItem onChange={onChange} onBlur={onBlur} value={value} removeTag={remove} index={index} />
+                    <TagListItem
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      value={value}
+                      addTag={append}
+                      removeTag={remove}
+                      index={index}
+                      length={fields.length}
+                    />
                   )
                 }}
                 key={field.id}
@@ -115,14 +135,6 @@ export default function BlankArticleForm({ title, defaultValues }) {
                 control={control}
               />
             ))}
-            <Controller
-              render={({ field: { onChange, onBlur, value } }) => {
-                return <TagListItem onChange={onChange} onBlur={onBlur} value={value} addTag={append} />
-              }}
-              name="new-tag-input"
-              control={control}
-              defaultValue={{ tagName: '' }}
-            />
           </ul>
         </div>
       </div>

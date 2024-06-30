@@ -1,6 +1,5 @@
 import ErrorFetchData from '../errors/errorFetchData'
-
-import { URL_API, ENDPOINTS } from './constants'
+import { URL_API, ENDPOINTS } from '../constants/api-constants'
 
 async function fetcher(url, options = {}) {
   const response = await fetch(url, options)

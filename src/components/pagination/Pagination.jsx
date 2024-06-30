@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
 import { useQuery } from '../../hooks'
+import { ROUTE_PATH_TEMPLATES } from '../../constants/routes-constants'
 
 import styles from './Pagination.module.scss'
 
@@ -13,7 +14,7 @@ export default function Pagination() {
   const currentPage = Number(query.get('page')) || 1
 
   if (Math.sign(currentPage) === -1) {
-    history.push('/articles/?page=1')
+    history.push(ROUTE_PATH_TEMPLATES.ARTICLES_PAGES(1))
   }
 
   const [startPage, setStartPage] = useState(0)
@@ -28,7 +29,7 @@ export default function Pagination() {
 
   useEffect(() => {
     if (pages.length && currentPage > pages.length) {
-      history.push(`/articles/?page=${pages.length}`)
+      history.push(ROUTE_PATH_TEMPLATES.ARTICLES_PAGES(pages.length))
     }
   }, [pages])
 
@@ -44,7 +45,7 @@ export default function Pagination() {
     <div className={styles['pagination-wrapper']}>
       <button
         onClick={() => {
-          history.push(`/articles/?page=${currentPage - 1}`)
+          history.push(ROUTE_PATH_TEMPLATES.ARTICLES_PAGES(currentPage - 1))
         }}
         disabled={currentPage === 1}
         type="button"
@@ -55,7 +56,7 @@ export default function Pagination() {
         return (
           <button
             onClick={() => {
-              history.push(`/articles/?page=${page}`)
+              history.push(ROUTE_PATH_TEMPLATES.ARTICLES_PAGES(page))
             }}
             key={page}
             type="button"
@@ -71,7 +72,7 @@ export default function Pagination() {
         aria-label="forward page"
         className={styles['page-arrow-button']}
         onClick={() => {
-          history.push(`/articles/?page=${currentPage + 1}`)
+          history.push(ROUTE_PATH_TEMPLATES.ARTICLES_PAGES(currentPage + 1))
         }}
         disabled={currentPage >= pages.length}
       />

@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react'
 import { fetchArticleBySlug } from '../../api'
 import BlankArticleForm from '../../components/blank-article-form'
 
-export default function EditArticle({ routeProps }) {
-  const { slug } = routeProps.match.params
+export default function EditArticle({ match }) {
+  const { slug } = match.params
   const [article, setArticle] = useState()
 
   useEffect(() => {

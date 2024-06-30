@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 
 import { fetchArticleBySlug, fetchFavoriteArticleBySlug, fetchUnfavoriteArticleBySlug } from '../../api'
+import { ROUTE_PATH, ROUTE_PATH_TEMPLATES } from '../../constants/routes-constants'
 import { addError } from '../../store/slices/commonStateSlice'
 import getId from '../../utils/idGenerators'
 import ProfileAvatar from '../profile-avatar'
@@ -17,6 +18,7 @@ import EditArticleButtons from './edit-article-buttons'
 export default function ArticleListItem({ articleId, withBody }) {
   const [article, setArticle] = useState()
   const currentUser = useSelector((store) => store.currentUser.username)
+  const authorized = useSelector((store) => store.currentUser.authorized)
   const token = useSelector((store) => store.currentUser.token)
   const history = useHistory()
   const dispatch = useDispatch()
@@ -65,30 +67,34 @@ export default function ArticleListItem({ articleId, withBody }) {
       <div className={styles.header}>
         <div className={styles.description}>
           <div className={styles['title-wrapper']}>
-            <Link to={`/articles/${slug}`} className={styles.title}>
+            <Link to={ROUTE_PATH_TEMPLATES.ARTICLE_WITH_SLUG(slug)} className={styles.title}>
               {title}
             </Link>
             <div className={styles['like-wrapper']}>
               <button
                 onClick={async () => {
-                  if (favorited) {
-                    try {
-                      const data = await fetchUnfavoriteArticleBySlug(articleId, token)
-                      setArticle(data)
-                    } catch (error) {
-                      if (error.response?.status === 401) {
-                        history.push('/sign-in')
+                  if (authorized) {
+                    if (favorited) {
+                      try {
+                        const data = await fetchUnfavoriteArticleBySlug(articleId, token)
+                        setArticle(data)
+                      } catch (error) {
+                        if (error.response?.status === 401) {
+                          history.push(ROUTE_PATH.SIGN_IN)
+                        }
+                      }
+                    } else {
+                      try {
+                        const data = await fetchFavoriteArticleBySlug(articleId, token)
+                        setArticle(data)
+                      } catch (error) {
+                        if (error.response?.status === 401) {
+                          history.push(ROUTE_PATH.SIGN_IN)
+                        }
                       }
                     }
                   } else {
-                    try {
-                      const data = await fetchFavoriteArticleBySlug(articleId, token)
-                      setArticle(data)
-                    } catch (error) {
-                      if (error.response?.status === 401) {
-                        history.push('/sign-in')
-                      }
-                    }
+                    history.push(ROUTE_PATH.SIGN_IN)
                   }
                 }}
                 type="button"

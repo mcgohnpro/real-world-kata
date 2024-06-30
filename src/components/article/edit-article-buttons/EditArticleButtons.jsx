@@ -4,6 +4,7 @@ import { useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min'
 import { useState } from 'react'
 
 import DeleteArticleModal from '../delete-article-modal/DeleteArticleModal'
+import { ROUTE_PATH_TEMPLATES } from '../../../constants/routes-constants'
 
 import styles from './EditArticleButtons.module.scss'
 
@@ -15,7 +16,7 @@ export default function EditArticleButtons({ author, currentUser }) {
     params: { slug },
   } = useRouteMatch()
 
-  if (!(path !== '/articles/:slug') && !(currentUser !== author.username))
+  if (path === '/articles/:slug' && currentUser === author.username)
     return (
       <div className={styles['edit-article-buttons-wrapper']}>
         {showDeleteArticleModal ? <DeleteArticleModal setShowDeleteArticleModal={setShowDeleteArticleModal} /> : null}
@@ -29,7 +30,7 @@ export default function EditArticleButtons({ author, currentUser }) {
           Delete
         </button>
         <Link
-          to={`/articles/${slug}/edit`}
+          to={ROUTE_PATH_TEMPLATES.EDIT_ARTICLE(slug)}
           className={`${styles['edit-article-button']} ${styles['edit-article-button--edit']}`}
         >
           Edit

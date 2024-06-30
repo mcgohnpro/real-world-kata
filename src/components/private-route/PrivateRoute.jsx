@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { loadCurrentUser } from '../../store/slices/currentUserSlice'
+import { ROUTE_PATH } from '../../constants/routes-constants'
 
 function PrivateRoute({ component: Component, ...rest }) {
   const { authorized } = useSelector((store) => store.currentUser)
@@ -29,7 +30,7 @@ function PrivateRoute({ component: Component, ...rest }) {
           return null
         }
         if (!checkAuthorizedState) {
-          return <Redirect to="/" />
+          return <Redirect to={ROUTE_PATH.ROOT_PATH} />
         }
         return <Component {...props} />
       }}

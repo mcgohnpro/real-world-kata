@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 
 import styles from './TagListItem.module.scss'
 
-export default function TagListItem({ value: { tagName }, onChange, onBlur, addTag, removeTag, index }) {
+export default function TagListItem({ value: { tagName }, onChange, onBlur, addTag, removeTag, index, length }) {
   return (
     <li className={styles['tag-list-item']}>
       <input
@@ -17,7 +17,11 @@ export default function TagListItem({ value: { tagName }, onChange, onBlur, addT
       />
       <input
         onClick={() => {
-          removeTag(index)
+          if (length > 1) {
+            removeTag(index)
+          } else {
+            onChange({ tagName: '' })
+          }
         }}
         value="Delete"
         type="button"
@@ -25,8 +29,9 @@ export default function TagListItem({ value: { tagName }, onChange, onBlur, addT
       />
       <input
         onClick={() => {
-          addTag({ tagName })
-          onChange({ tagName: '' })
+          if (tagName !== '') {
+            addTag({ tagName: '' })
+          }
         }}
         value="Add tag"
         type="button"
@@ -43,6 +48,7 @@ TagListItem.defaultProps = {
   onBlur: () => {},
   addTag: () => {},
   index: 0,
+  length: 1,
 }
 
 TagListItem.propTypes = {
@@ -52,4 +58,5 @@ TagListItem.propTypes = {
   onBlur: PropTypes.func,
   addTag: PropTypes.func,
   index: PropTypes.number,
+  length: PropTypes.number,
 }

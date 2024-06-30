@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Redirect, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 
+import { ROUTE_PATH } from '../../constants/routes-constants'
 import ArticlesList from '../../pages/articles'
 import EditProfileForm from '../../pages/auth/profile'
 import SignInForm from '../../pages/auth/sign-in'
@@ -29,7 +30,7 @@ function App() {
       <main className={styles.main}>
         <Switch>
           <Route
-            path="/"
+            path={ROUTE_PATH.ROOT_PATH}
             exact
             render={() => {
               return <ArticlesList />
@@ -37,31 +38,25 @@ function App() {
           />
           <Route
             exact
-            path="/articles/"
+            path={ROUTE_PATH.ARTICLES}
             render={() => {
               return <ArticlesList />
             }}
           />
           <Route
             exact
-            path="/articles/:slug"
+            path={ROUTE_PATH.ARTICLE_WITH_SLUG}
             render={({ match }) => {
               const { slug } = match.params
               return <ArticleListItem articleId={slug} withBody />
             }}
           />
-          <Route
-            exact
-            path="/articles/:slug/edit"
-            render={(routeProps) => {
-              return <EditArticle routeProps={routeProps} />
-            }}
-          />
-          <Route exact path="/sign-in" component={SignInForm} />
-          <Route exact path="/sign-up" component={SignUpForm} />
-          <PrivateRoute exact path="/profile" component={EditProfileForm} />
-          <Route path="/new-article" component={CreateArticle} />
-          <Redirect to="/" />
+          <PrivateRoute exact path={ROUTE_PATH.EDIT_ARTICLE} component={EditArticle} />
+          <Route exact path={ROUTE_PATH.SIGN_IN} component={SignInForm} />
+          <Route exact path={ROUTE_PATH.SIGN_UP} component={SignUpForm} />
+          <PrivateRoute exact path={ROUTE_PATH.PROFILE} component={EditProfileForm} />
+          <PrivateRoute exact path={ROUTE_PATH.NEW_ARTICLE} component={CreateArticle} />
+          <Redirect to={ROUTE_PATH.ROOT_PATH} />
         </Switch>
       </main>
     </Router>
